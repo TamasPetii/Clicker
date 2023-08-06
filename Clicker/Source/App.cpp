@@ -90,6 +90,12 @@ void App::PreRender()
     case 1: ImGui::StyleColorsLight(); break;
     case 2: ImGui::StyleColorsClassic(); break;
     }
+
+    if (Clicker::GetChangedRef())
+    {
+        Clicker::GetChangedRef() = false;
+        mSettings->mLeftActive = Clicker::GetLeftRef();
+    }
 }
 
 void App::PostRender()

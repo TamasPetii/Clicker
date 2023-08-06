@@ -3,6 +3,7 @@
 int Clicker::mDelay = 25;
 bool Clicker::mLeft = true;
 bool Clicker::mRun = true;
+bool Clicker::mChanged = false;
 std::thread Clicker::mThread;
 
 void Clicker::Start()
@@ -38,6 +39,16 @@ void Clicker::Callback()
 				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
 				std::this_thread::sleep_for(std::chrono::milliseconds(mDelay));
 			}
+		}
+		if (GetAsyncKeyState(0x70))
+		{
+			mLeft = true;
+			mChanged = true;
+		}
+		if (GetAsyncKeyState(0x71))
+		{
+			mLeft = false;
+			mChanged = true;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(mDelay));
 	}
