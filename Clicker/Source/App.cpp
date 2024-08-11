@@ -70,7 +70,6 @@ void App::Render()
 {
 	PreRender();
     RenderDockSpace();
-    //RenderDemo();
     RenderClicker();
     PostRender();
 }
@@ -91,10 +90,10 @@ void App::PreRender()
     case 2: ImGui::StyleColorsClassic(); break;
     }
 
-    if (Clicker::GetChangedRef())
+    if (Clicker::mChanged)
     {
-        Clicker::GetChangedRef() = false;
-        mSettings->mLeftActive = Clicker::GetLeftRef();
+        Clicker::mChanged = false;
+        mSettings->mLeftActive = Clicker::mLeft;
     }
 }
 
@@ -170,7 +169,7 @@ void App::RenderClicker()
 {
     bool leftActive = mSettings->mLeftActive;
 
-    ImGui::Begin("Application", nullptr, ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Application", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove);
 
     //Left Button
     if (leftActive)
@@ -233,11 +232,11 @@ void App::RenderClicker()
     ImGui::Text("Delay (ms):");
     ImGui::SameLine();
     ImGui::SetCursorPos(ImVec2(110, ImGui::GetCursorPos().y));
-    ImGui::SliderInt("##ClickDelay", &Clicker::GetDelayRef(), 5, 100);
+    ImGui::SliderInt("##ClickDelay", &Clicker::mDelay, 1, 100);
 
     ImGui::End();
 
-    Clicker::GetLeftRef() = mSettings->mLeftActive;
+    Clicker::mLeft = mSettings->mLeftActive;
 }
 
 void App::LoadSettings()
@@ -249,7 +248,7 @@ void App::LoadSettings()
     {
         file >> mSettings->mColorTheme;
         file >> mSettings->mButtonColor.x >> mSettings->mButtonColor.y >> mSettings->mButtonColor.z >> mSettings->mButtonColor.w;
-        file >> Clicker::GetDelayRef();
+        file >> Clicker::mDelay;
     }
 }
 
@@ -261,6 +260,6 @@ void App::SaveSettings()
     {
         file << mSettings->mColorTheme << std::endl;
         file << mSettings->mButtonColor.x << " " << mSettings->mButtonColor.y << " " << mSettings->mButtonColor.z << " " << mSettings->mButtonColor.w << std::endl;
-        file << Clicker::GetDelayRef();
+        file << Clicker::mDelay;
     }
 }
